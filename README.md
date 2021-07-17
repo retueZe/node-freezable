@@ -19,8 +19,8 @@ class Box extends Freezable {
     }
 }
 
-const box = new Box({num: 432}).freeze(); // in `Freezable` implementation executes `Object.freeze`
-console.log();
+const box = new Box({num: 432}).freeze(); // in the `Freezable` implementation executes `Object.freeze`
+console.log(box.frozen); // true // in the `Freezable` implementation executes `Object.isFrozen`
 const copy = box.copy();
 box.compare(copy);
 /* Output:
@@ -30,6 +30,7 @@ box.compare(copy);
  * Num: true
  */
 const clone = box.clone();
+box.compare(clone);
 /* Output:
  * Frozen: false
  * Reference: false
@@ -46,7 +47,7 @@ const changed = box
     })) // box.value === 54
     .with(original => ({
         value: (original.value - 4) / 5
-    }))
+    })) // box.value === 10
     .freeze();
 console.log(changed.frozen); // true
 console.log(changed.value); // 10
