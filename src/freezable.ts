@@ -37,7 +37,21 @@ export function copyObject<T extends{}>(original: Readonly<T>): T {
     const copy: any = {};
     Object.setPrototypeOf(copy, Object.getPrototypeOf(original));
     getObjectKeys(original)
-        .forEach(key => Object.defineProperty(copy, key, Object.getOwnPropertyDescriptor(original, key)!));
+        .map(key => ({key: key, descriptor: Object.getOwnPropertyDescriptor(original, key)!}))
+        .forEach(({key, descriptor}) => Object.defineProperty(copy, key,
+            typeof descriptor.get === 'undefined' &&
+            typeof descriptor.set === 'undefined'
+            ? {
+                value: descriptor.value,
+                writable: true,
+                enumerable: descriptor.enumerable,
+                configurable: true
+            } : {
+                get: descriptor.get,
+                set: descriptor.set,
+                enumerable: descriptor.enumerable,
+                configurable: true
+            }));
 
     return copy;
 }
@@ -50,12 +64,18 @@ export function cloneObject<T extends {}>(original: Readonly<T>): T {
     for (const originalPropertyKey of originalPropertyKeys) {
         const originalPropertyDescriptor = Object.getOwnPropertyDescriptor(original, originalPropertyKey)!;
         const copyPropertyDescriptor: PropertyDescriptor =
-            originalPropertyDescriptor.get !== null ||
-            originalPropertyDescriptor.set !== null
-            ? originalPropertyDescriptor
-            : {
-                ...originalPropertyDescriptor,
-                value: cloneObject((original as any)[originalPropertyKey])
+            typeof originalPropertyDescriptor.get !== 'undefined' ||
+            typeof originalPropertyDescriptor.set !== 'undefined'
+            ? {
+                get: originalPropertyDescriptor.get,
+                set: originalPropertyDescriptor.set,
+                enumerable: originalPropertyDescriptor.enumerable,
+                configurable: true
+            } : {
+                value: cloneObject((original as any)[originalPropertyKey]),
+                writable: true,
+                enumerable: originalPropertyDescriptor.enumerable,
+                configurable: true
             };
         
         Object.defineProperty(clone, originalPropertyKey, copyPropertyDescriptor);
