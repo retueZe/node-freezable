@@ -12,7 +12,7 @@ class Box extends Freezable {
     }
 
     compare(other) {
-        console.log(`Frozen: ${this.frozen == other.frozen}`);
+        console.log(`Frozen: ${this.frozen === other.frozen}`);
         console.log(`Reference: ${this === other}`);
         console.log(`Value: ${this.value === other.value}`);
         console.log(`Num: ${this.value.num === other.value.num}`);
@@ -52,3 +52,8 @@ const changed = box
 console.log(changed.frozen); // true
 console.log(changed.value); // 10
 ```
+
+**Injection**
+
+- `Injection.injectFreezable(target)` — injects `IFreezable` implementation to the `target`
+- `Injection.injectUtilities()` — injects `copyObject`, `cloneObject`, and `changeObject` utility functions to the `Object` class

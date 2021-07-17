@@ -9,6 +9,9 @@ export interface IFreezable {
     with<TKeys extends PropertyKey>(selection: Readonly<Intersection<this, TKeys>>): this;
     with<TKeys extends PropertyKey>(selector: (original: Readonly<this>) => Readonly<Intersection<this, TKeys>>): this;
 }
+/**
+ * Default {@link IFreezable} implementation.
+ */
 export default class Freezable implements IFreezable {
     get frozen(): boolean {
         return Object.isFrozen(this);

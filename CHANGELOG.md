@@ -1,3 +1,9 @@
+**v1.1.2**
+
+- Documented `Injection.injectFreezable`, `Injection.injectUtilities`, `Freezable`
+- Fixed the content of the read-me file.
+- Added an `Injection` section to the read-me file.
+
 **v1.1.1**
 
 - Fixed the content of the read-me file.

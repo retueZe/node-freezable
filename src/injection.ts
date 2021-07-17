@@ -17,6 +17,9 @@ namespace Injection {
         change<T extends {}, TKeys extends PropertyKey>(original: Readonly<T>, selector: (original: Readonly<T>) => Readonly<Intersection<T, TKeys>>): T;
     }>;
 
+    /**
+     * Injects `IFreezable` implementation to the `target`.
+     */
     export function injectFreezable<T extends {}>(target: T): InjectedFreezable<T> {
         const targetAsAny: any = target;
         Object.defineProperty(targetAsAny, 'frozen', {
@@ -33,6 +36,9 @@ namespace Injection {
 
         return targetAsAny;
     }
+    /**
+     * Injects `copyObject`, `cloneObject`, and `changeObject` utility functions to the `Object` class.
+     */
     export function injectUtilities(): InjectedUtilities {
         const targetAsAny: any = Object.prototype;
         targetAsAny.copy = copyObject;
