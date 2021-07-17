@@ -1,7 +1,13 @@
 import { Union, Intersection } from 'composite-types';
 import { copyObject, cloneObject, changeObject } from './freezable';
 
+/**
+ * Contains the freezable injection utilities.
+ */
 namespace Injection {
+    /**
+     * The type of an object injected freezable interface.
+     */
     export type InjectedFreezable<T extends {}> = Union<T, {
         readonly frozen: boolean;
         freeze(): Readonly<InjectedFreezable<T>>;
@@ -10,6 +16,9 @@ namespace Injection {
         with<TKeys extends PropertyKey>(selection: Readonly<Intersection<InjectedFreezable<T>, TKeys>>): InjectedFreezable<T>;
         with<TKeys extends PropertyKey>(selector: (original: Readonly<InjectedFreezable<T>>) => Readonly<Intersection<InjectedFreezable<T>, TKeys>>): InjectedFreezable<T>;
     }>;
+    /**
+     * The type of the {@link Object} injected freezable utilities.
+     */
     export type InjectedUtilities = Union<Object, {
         copy<T extends {}>(original: Readonly<T>): T;
         clone<T extends {}>(original: Readonly<T>): T;
@@ -18,7 +27,7 @@ namespace Injection {
     }>;
 
     /**
-     * Injects `IFreezable` implementation to the `target`.
+     * Injects the default `IFreezable` implementation to the `target`.
      */
     export function injectFreezable<T extends {}>(target: T): InjectedFreezable<T> {
         const targetAsAny: any = target;

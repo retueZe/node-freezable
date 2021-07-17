@@ -55,5 +55,5 @@ console.log(changed.value); // 10
 
 **Injection**
 
-- `Injection.injectFreezable(target)` — injects `IFreezable` implementation to the `target`
+- `Injection.injectFreezable(target)` — injects the default `IFreezable` implementation to the `target`
 - `Injection.injectUtilities()` — injects `copyObject`, `cloneObject`, and `changeObject` utility functions to the `Object` class

@@ -1,3 +1,9 @@
+**v1.1.3**
+
+- Fixed the `Injection.injectFreezable` function description in the documentation and in the read-me file.
+- Fixed the `Freezable` class documentation.
+- Documented everything (since v1.1.2 `Injection.injectFreezable`, `Injection.injectUtilities`, `Freezable`).
+
 **v1.1.2**
 
 - Documented `Injection.injectFreezable`, `Injection.injectUtilities`, `Freezable`

@@ -1,32 +1,71 @@
 import { Intersection } from 'composite-types';
 
+/**
+ * The type of the freezable interface.
+ */
 export interface IFreezable {
+    /**
+     * When this object is frozen, returns true; otherwise false.
+     */
     readonly frozen: boolean;
 
+    /**
+     * Freezes this object and returns it.
+     */
     freeze(): Readonly<this>;
+    /**
+     * Returns an unfrozen copy of this object.
+     */
     copy(): this;
+    /**
+     * Returns an unfrozen clone of this object. Each cloneable property shall have cloned value in the clone.
+     */
     clone(): this;
+    /**
+     * Returns a copy of this object (by the {@link IFreezable.copy} method) and sets the copied properties to passed in the `selection`.
+     */
     with<TKeys extends PropertyKey>(selection: Readonly<Intersection<this, TKeys>>): this;
+    /**
+     * Returns a copy of this object (by the {@link IFreezable.copy} method) and sets the copied properties to passed in a result of the `selector`.
+     */
     with<TKeys extends PropertyKey>(selector: (original: Readonly<this>) => Readonly<Intersection<this, TKeys>>): this;
 }
 /**
- * Default {@link IFreezable} implementation.
+ * The default {@link IFreezable} implementation.
  */
 export default class Freezable implements IFreezable {
+    /**
+     * Calls `Object.isFrozen` for this freezable.
+     */
     get frozen(): boolean {
         return Object.isFrozen(this);
     }
 
+    /**
+     * Calls `Object.freeze` for this freezable.
+     */
     freeze(): Readonly<this> {
         return Object.freeze(this);
     }
+    /**
+     * Calls `copyObject` for this freezable.
+     */
     copy(): this {
         return copyObject<this>(this);
     }
+    /**
+     * Calls `cloneObject` for this freezable.
+     */
     clone(): this {
         return cloneObject<this>(this);
     }
+    /**
+     * Calls `changeObject` for this freezable.
+     */
     with<TKeys extends PropertyKey>(selection: Readonly<Intersection<this, TKeys>>): this;
+    /**
+     * Calls `changeObject` for this freezable.
+     */
     with<TKeys extends PropertyKey>(selector: (original: Readonly<this>) => Readonly<Intersection<this, TKeys>>): this;
     with(arg: any): this {
         return changeObject<this, PropertyKey>(this, arg);
@@ -36,6 +75,9 @@ function getObjectKeys<T extends {}>(object: T): (keyof T)[] {
     return (Object.getOwnPropertyNames(object) as PropertyKey[])
         .concat(Object.getOwnPropertySymbols(object)) as (keyof T)[];
 }
+/**
+ * Returns a copy of the `original` object. All properties shall get writable and configurable after this. The copy shall set its prototype to `original`'s.
+ */
 export function copyObject<T extends{}>(original: Readonly<T>): T {
     const copy: any = {};
     Object.setPrototypeOf(copy, Object.getPrototypeOf(original));
@@ -58,6 +100,9 @@ export function copyObject<T extends{}>(original: Readonly<T>): T {
 
     return copy;
 }
+/**
+ * Returns a clone of the `original` object. All properties shall get writable and configurable after this. Each cloneable property shall have cloned value in the clone. The clone shall set its prototype to `original`'s.
+ */
 export function cloneObject<T extends {}>(original: Readonly<T>): T {
     if (typeof original !== 'object' || original === null) return original;
 
@@ -86,7 +131,13 @@ export function cloneObject<T extends {}>(original: Readonly<T>): T {
 
     return clone;
 }
+/**
+ * Returns a copy of the `original` object (by the {@link copyObject} function) and sets the copied properties to passed in the `selection`.
+ */
 export function changeObject<T extends {}, TKeys extends PropertyKey>(original: Readonly<T>, selection: Readonly<Intersection<T, TKeys>>): T;
+/**
+ * Returns a copy of the `original` object (by the {@link copyObject} function) and sets the copied properties to passed in a result of the `selector`.
+ */
 export function changeObject<T extends {}, TKeys extends PropertyKey>(original: Readonly<T>, selector: (original: Readonly<T>) => Readonly<Intersection<T, TKeys>>): T;
 export function changeObject<T extends {}>(original: T, arg: any): T {
     const selection = typeof arg === 'function'
