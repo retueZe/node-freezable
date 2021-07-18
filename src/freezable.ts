@@ -14,19 +14,19 @@ export interface IFreezable {
      */
     freeze(): Readonly<this>;
     /**
-     * Returns an unfrozen copy of this object.
+     * Returns an unfrozen and unsealed copy of this object.
      */
     copy(): this;
     /**
-     * Returns an unfrozen clone of this object. Each cloneable property shall have cloned value in the clone.
+     * Returns an unfrozen and unsealed clone of this object. Each cloneable property shall have cloned value in the clone.
      */
     clone(): this;
     /**
-     * Returns a copy of this object (by the {@link IFreezable.copy} method) and sets the copied properties to passed in the `selection`.
+     * Returns a copy of this object (using the {@link IFreezable.copy} method) and sets the copied properties to passed in the `selection`.
      */
     with<TKeys extends PropertyKey>(selection: Readonly<Intersection<this, TKeys>>): this;
     /**
-     * Returns a copy of this object (by the {@link IFreezable.copy} method) and sets the copied properties to passed in a result of the `selector`.
+     * Returns a copy of this object (using the {@link IFreezable.copy} method) and sets the copied properties to passed in a result of the `selector`.
      */
     with<TKeys extends PropertyKey>(selector: (original: Readonly<this>) => Readonly<Intersection<this, TKeys>>): this;
 }
@@ -76,7 +76,7 @@ function getObjectKeys<T extends {}>(object: T): (keyof T)[] {
         .concat(Object.getOwnPropertySymbols(object)) as (keyof T)[];
 }
 /**
- * Returns a copy of the `original` object. All properties shall get writable and configurable after this. The copy shall set its prototype to `original`'s.
+ * Returns an unfrozen and unsealed copy of the `original` object. All properties shall get writable and configurable after this. The copy shall set its prototype to `original`'s.
  */
 export function copyObject<T extends{}>(original: Readonly<T>): T {
     const copy: any = {};
@@ -101,7 +101,7 @@ export function copyObject<T extends{}>(original: Readonly<T>): T {
     return copy;
 }
 /**
- * Returns a clone of the `original` object. All properties shall get writable and configurable after this. Each cloneable property shall have cloned value in the clone. The clone shall set its prototype to `original`'s.
+ * Returns an unfrozen and unsealed clone of the `original` object. All properties shall get writable and configurable after this. Each cloneable property shall have cloned value in the clone. The clone shall set its prototype to `original`'s.
  */
 export function cloneObject<T extends {}>(original: Readonly<T>): T {
     if (typeof original !== 'object' || original === null) return original;
@@ -132,11 +132,11 @@ export function cloneObject<T extends {}>(original: Readonly<T>): T {
     return clone;
 }
 /**
- * Returns a copy of the `original` object (by the {@link copyObject} function) and sets the copied properties to passed in the `selection`.
+ * Returns a copy of the `original` object (using the {@link copyObject} function) and sets the copied properties to passed in the `selection`.
  */
 export function changeObject<T extends {}, TKeys extends PropertyKey>(original: Readonly<T>, selection: Readonly<Intersection<T, TKeys>>): T;
 /**
- * Returns a copy of the `original` object (by the {@link copyObject} function) and sets the copied properties to passed in a result of the `selector`.
+ * Returns a copy of the `original` object (using the {@link copyObject} function) and sets the copied properties to passed in a result of the `selector`.
  */
 export function changeObject<T extends {}, TKeys extends PropertyKey>(original: Readonly<T>, selector: (original: Readonly<T>) => Readonly<Intersection<T, TKeys>>): T;
 export function changeObject<T extends {}>(original: T, arg: any): T {

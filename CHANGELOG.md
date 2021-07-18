@@ -1,3 +1,9 @@
+**v1.1.4**
+
+- Fixed the example in the read-me file.
+- Added the "Utilities" and "Object spreading vs `copyObject`" blocks to the read-me file.
+- Fixed documentation of the `IFreezable.copy`, `IFreezable.clone`, `IFreezable.with` (both overloads), `copyObject`, `cloneObject`, `changeObject` (both overloads).
+
 **v1.1.3**
 
 - Fixed the `Injection.injectFreezable` function description in the documentation and in the read-me file.
