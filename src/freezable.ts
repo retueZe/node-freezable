@@ -61,14 +61,14 @@ export default class Freezable implements IFreezable {
         return cloneObject<this>(this);
     }
     /**
-     * Calls `changeObject` for this freezable.
+     * Calls `changeObject` for a copy of this freezable.
      */
     with(selection: Readonly<Intersection<this, PropertyKey>>): this;
     /**
-     * Calls `changeObject` for this freezable.
+     * Calls `changeObject` for a copy of this freezable.
      */
     with(selector: (original: Readonly<this>) => Readonly<Intersection<this, PropertyKey>>): this;
     with(arg: any): this {
-        return changeObject<this>(this, arg);
+        return changeObject<this>(this.copy(), arg);
     }
 }

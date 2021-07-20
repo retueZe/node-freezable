@@ -63,13 +63,13 @@ export function cloneObject<T>(original: Readonly<T>): T {
     return clone;
 }
 /**
- * Returns a copy of the `original` object (using the {@link copyObject} function) and sets the copied properties to passed in the `selection`.
+ * Sets `original`'s properties to passed in the `selection`.
  */
-export function changeObject<T>(original: Readonly<T>, selection: Readonly<Intersection<T, PropertyKey>>): T;
+export function changeObject<T>(original: T, selection: Readonly<Intersection<T, PropertyKey>>): T;
 /**
- * Returns a copy of the `original` object (using the {@link copyObject} function) and sets the copied properties to passed in a result of the `selector`.
+ * Sets `original`'s properties to passed in a result of the `selector`.
  */
-export function changeObject<T>(original: Readonly<T>, selector: (original: Readonly<T>) => Readonly<Intersection<T, PropertyKey>>): T;
+export function changeObject<T>(original: T, selector: (original: Readonly<T>) => Readonly<Intersection<T, PropertyKey>>): T;
 export function changeObject<T>(original: T, arg: any): T {
     if (typeof arg !== 'object' && typeof arg !== 'function')
         throw new TypeError('Selection/selector have to be an object/a function.');
@@ -82,12 +82,16 @@ export function changeObject<T>(original: T, arg: any): T {
     if (typeof selection !== 'object')
         throw new TypeError('Selector result have to be an object.');
 
-    const copy = copyObject<T>(original);
     let previous: any = null;
+    const unsetted = new Set<PropertyKey>();
 
-    for (let current: any = copy; current !== previous; previous = current, current = Object.getPrototypeOf(copy))
+    for (const key in selection)
+        unsetted.add(key);
+
+    for (let current: any = original; current !== previous; previous = current, current = Object.getPrototypeOf(current)) {
         getObjectKeys(current)
             .filter(key => selection.hasOwnProperty(key))
+            .filter(key => unsetted.has(key))
             .filter(key => {
                 const descriptor = Object.getOwnPropertyDescriptor(current, key)!;
 
@@ -95,7 +99,13 @@ export function changeObject<T>(original: T, arg: any): T {
                     typeof descriptor.set !== 'undefined') ||
                     descriptor.writable;
             })
-            .forEach(key => current[key] = selection[key]);
+            .forEach(key => {
+                current[key] = selection[key];
+                unsetted.delete(key);
+            });
 
-    return copy;
+        if (unsetted.size == 0) break;
+    }
+
+    return original;
 }

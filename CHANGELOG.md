@@ -1,6 +1,13 @@
+**v2.0.0**
+
+- Changed `changeObject` function: changes and returns *original* object (since v1.0.0 changes and returns *copy*).
+- Edited the `changeObject` (both overloads) and the `Freezable.with` (both overloads) documentation.
+- Fixed a bug: when changing object's prototype has a property with the same key as the object, each property shall be changed (expected: only object's property shall be changed).
+- Edited the `changeObject` description in the read-me file.
+
 **v1.3.0**
 
-- Removed `TKeys` generics from `changeObject` function (both overloads) and `IFreezable.with` method (both overloads).
+- Removed `TKeys` generics from the `changeObject` function (both overloads) and the `IFreezable.with` method (both overloads).
 
 **v1.2.0**
 
@@ -11,7 +18,7 @@
 
 - Fixed the example in the read-me file.
 - Added the "Utilities" and "Object spreading vs `copyObject`" blocks to the read-me file.
-- Fixed documentation of the `IFreezable.copy`, `IFreezable.clone`, `IFreezable.with` (both overloads), `copyObject`, `cloneObject`, `changeObject` (both overloads).
+- Fixed the documentation of the `IFreezable.copy`, `IFreezable.clone`, `IFreezable.with` (both overloads), `copyObject`, `cloneObject`, `changeObject` (both overloads).
 
 **v1.1.3**
 

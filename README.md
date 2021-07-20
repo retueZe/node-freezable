@@ -59,7 +59,7 @@ This package provides 3 utility functions: `copyObject`, `cloneObject`, and `cha
 
 - `copyObject(original)` — returns an unfrozen and unsealed copy of the `original` object
 - `cloneObject(original)` — returns an unfrozen and unsealed clone of the `original` object
-- `changeObject(original, selection)` — returns a copy of the `original` object (using the `copyObject` function) and sets the copied properties to passed in the `selection`
+- `changeObject(original, selection)` — sets `original`'s properties to passed in the `selection`
 - `changeObject(original, selector)` — same as first overload, but the selection can depend on the `original` object through the `selector` callback
 
 **Object spreading vs `copyObject`**

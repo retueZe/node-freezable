@@ -22,8 +22,8 @@ namespace Injection {
     export type InjectedUtilities = Union<Object, {
         copy<T extends {}>(original: Readonly<T>): T;
         clone<T extends {}>(original: Readonly<T>): T;
-        change<T extends {}, TKeys extends PropertyKey>(original: Readonly<T>, selection: Readonly<Intersection<T, TKeys>>): T;
-        change<T extends {}, TKeys extends PropertyKey>(original: Readonly<T>, selector: (original: Readonly<T>) => Readonly<Intersection<T, TKeys>>): T;
+        change<T extends {}, TKeys extends PropertyKey>(original: T, selection: Readonly<Intersection<T, TKeys>>): T;
+        change<T extends {}, TKeys extends PropertyKey>(original: T, selector: (original: Readonly<T>) => Readonly<Intersection<T, TKeys>>): T;
     }>;
 
     /**
