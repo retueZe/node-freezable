@@ -1,3 +1,8 @@
+**v1.2.0**
+
+- Fixed the `Injection.injectUtilities` description in the read-me file.
+- Added type checks.
+
 **v1.1.4**
 
 - Fixed the example in the read-me file.
