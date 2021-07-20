@@ -24,11 +24,11 @@ export interface IFreezable {
     /**
      * Returns a copy of this object (using the {@link IFreezable.copy} method) and sets the copied properties to passed in the `selection`.
      */
-    with<TKeys extends PropertyKey>(selection: Readonly<Intersection<this, TKeys>>): this;
+    with(selection: Readonly<Intersection<this, PropertyKey>>): this;
     /**
      * Returns a copy of this object (using the {@link IFreezable.copy} method) and sets the copied properties to passed in a result of the `selector`.
      */
-    with<TKeys extends PropertyKey>(selector: (original: Readonly<this>) => Readonly<Intersection<this, TKeys>>): this;
+    with(selector: (original: Readonly<this>) => Readonly<Intersection<this, PropertyKey>>): this;
 }
 /**
  * The default {@link IFreezable} implementation.
@@ -62,13 +62,13 @@ export default class Freezable implements IFreezable {
     /**
      * Calls `changeObject` for this freezable.
      */
-    with<TKeys extends PropertyKey>(selection: Readonly<Intersection<this, TKeys>>): this;
+    with(selection: Readonly<Intersection<this, PropertyKey>>): this;
     /**
      * Calls `changeObject` for this freezable.
      */
-    with<TKeys extends PropertyKey>(selector: (original: Readonly<this>) => Readonly<Intersection<this, TKeys>>): this;
+    with(selector: (original: Readonly<this>) => Readonly<Intersection<this, PropertyKey>>): this;
     with(arg: any): this {
-        return changeObject<this, PropertyKey>(this, arg);
+        return changeObject<this>(this, arg);
     }
 }
 function getObjectKeys<T extends {}>(object: T): (keyof T)[] {
@@ -136,11 +136,11 @@ export function cloneObject<T>(original: Readonly<T>): T {
 /**
  * Returns a copy of the `original` object (using the {@link copyObject} function) and sets the copied properties to passed in the `selection`.
  */
-export function changeObject<T, TKeys extends PropertyKey>(original: Readonly<T>, selection: Readonly<Intersection<T, TKeys>>): T;
+export function changeObject<T>(original: Readonly<T>, selection: Readonly<Intersection<T, PropertyKey>>): T;
 /**
  * Returns a copy of the `original` object (using the {@link copyObject} function) and sets the copied properties to passed in a result of the `selector`.
  */
-export function changeObject<T, TKeys extends PropertyKey>(original: Readonly<T>, selector: (original: Readonly<T>) => Readonly<Intersection<T, TKeys>>): T;
+export function changeObject<T>(original: Readonly<T>, selector: (original: Readonly<T>) => Readonly<Intersection<T, PropertyKey>>): T;
 export function changeObject<T>(original: T, arg: any): T {
     if (typeof arg !== 'object' && typeof arg !== 'function')
         throw new TypeError('Selection/selector have to be an object/a function.');

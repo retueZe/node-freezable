@@ -1,3 +1,7 @@
+**v1.3.0**
+
+- Removed `TKeys` generics from `changeObject` function (both overloads) and `IFreezable.with` method (both overloads).
+
 **v1.2.0**
 
 - Fixed the `Injection.injectUtilities` description in the read-me file.
