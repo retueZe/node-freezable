@@ -30,6 +30,9 @@ namespace Injection {
      * Injects the default `IFreezable` implementation to the `target`.
      */
     export function injectFreezable<T extends {}>(target: T): InjectedFreezable<T> {
+        if (typeof target === 'undefined' || target === null)
+            throw new TypeError('The freezable imterface cannot be injected to undefined or null target.');
+
         const targetAsAny: any = target;
         Object.defineProperty(targetAsAny, 'frozen', {
             get: function() {

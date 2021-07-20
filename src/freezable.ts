@@ -78,7 +78,9 @@ function getObjectKeys<T extends {}>(object: T): (keyof T)[] {
 /**
  * Returns an unfrozen and unsealed copy of the `original` object. All properties shall get writable and configurable after this. The copy shall set its prototype to `original`'s.
  */
-export function copyObject<T extends{}>(original: Readonly<T>): T {
+export function copyObject<T>(original: Readonly<T>): T {
+    if (typeof original !== 'object' || original === null) return original;
+
     const copy: any = {};
     Object.setPrototypeOf(copy, Object.getPrototypeOf(original));
     getObjectKeys(original)
@@ -103,7 +105,7 @@ export function copyObject<T extends{}>(original: Readonly<T>): T {
 /**
  * Returns an unfrozen and unsealed clone of the `original` object. All properties shall get writable and configurable after this. Each cloneable property shall have cloned value in the clone. The clone shall set its prototype to `original`'s.
  */
-export function cloneObject<T extends {}>(original: Readonly<T>): T {
+export function cloneObject<T>(original: Readonly<T>): T {
     if (typeof original !== 'object' || original === null) return original;
 
     const clone = Object.create(Object.getPrototypeOf(original));
@@ -134,15 +136,23 @@ export function cloneObject<T extends {}>(original: Readonly<T>): T {
 /**
  * Returns a copy of the `original` object (using the {@link copyObject} function) and sets the copied properties to passed in the `selection`.
  */
-export function changeObject<T extends {}, TKeys extends PropertyKey>(original: Readonly<T>, selection: Readonly<Intersection<T, TKeys>>): T;
+export function changeObject<T, TKeys extends PropertyKey>(original: Readonly<T>, selection: Readonly<Intersection<T, TKeys>>): T;
 /**
  * Returns a copy of the `original` object (using the {@link copyObject} function) and sets the copied properties to passed in a result of the `selector`.
  */
-export function changeObject<T extends {}, TKeys extends PropertyKey>(original: Readonly<T>, selector: (original: Readonly<T>) => Readonly<Intersection<T, TKeys>>): T;
-export function changeObject<T extends {}>(original: T, arg: any): T {
+export function changeObject<T, TKeys extends PropertyKey>(original: Readonly<T>, selector: (original: Readonly<T>) => Readonly<Intersection<T, TKeys>>): T;
+export function changeObject<T>(original: T, arg: any): T {
+    if (typeof arg !== 'object' && typeof arg !== 'function')
+        throw new TypeError('Selection/selector have to be an object/a function.');
+    if (typeof original !== 'object' || original === null) return original;
+
     const selection = typeof arg === 'function'
         ? (arg as Function).call(undefined, original)
         : arg;
+
+    if (typeof selection !== 'object')
+        throw new TypeError('Selector result have to be an object.');
+
     const copy = copyObject<T>(original);
     let previous: any = null;
 
