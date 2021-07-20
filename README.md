@@ -79,4 +79,4 @@ As you can see, `copyObject` function is better when we need to copy an instance
 **Injection**
 
 - `Injection.injectFreezable(target)` — injects the default `IFreezable` implementation to the `target`
-- `Injection.injectUtilities()` — injects `copyObject`, `cloneObject`, and `changeObject` utility functions to the `Object` class
+- `Injection.injectUtilities()` — injects the `copyObject`, `cloneObject`, and `changeObject` functions to the `Object` class
