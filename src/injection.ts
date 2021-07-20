@@ -1,5 +1,5 @@
 import { Union, Intersection } from 'composite-types';
-import { copyObject, cloneObject, changeObject } from './freezable';
+import { copyObject, cloneObject, changeObject } from './utilities';
 
 /**
  * Contains the freezable injection utilities.
